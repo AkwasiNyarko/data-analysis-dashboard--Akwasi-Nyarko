@@ -1,4 +1,3 @@
-
 // ==========================================
 // 🏠 WEEK 1: Index.tsx - Homepage Component
 // ==========================================
@@ -43,18 +42,21 @@ const Index = () => {
         <div className="text-center mb-12">
           {/* 🎯 Logo and Title */}
           <div className="flex items-center justify-center mb-6">
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 rounded-full">
+            <div className="bg-gradient-to-r from-purple-600 to-indigo-600 p-4 rounded-full">
               <Database className="h-12 w-12 text-white" />
             </div>
           </div>
           
           {/* 📝 WEEK 1: Students customize this title with their name */}
           <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
-            Plug-N-Learn: Akwasi's Dashnoard
+            Plug-N-Learn: Akwasi's Data Hub
           </h1>
           <p className="text-xl text-slate-600 mb-2">Data Insight Engine</p>
           <p className="text-lg text-slate-500 max-w-2xl mx-auto">
             Upload your dataset and instantly discover insights, visualize trends, and explore your data with interactive charts and analytics.
+          </p>
+          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+            Built by Akwasi Nyarko - Future AI Engineer
           </p>
         </div>
 
