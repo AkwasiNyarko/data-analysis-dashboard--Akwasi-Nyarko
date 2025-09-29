@@ -18,6 +18,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import DataUpload from '@/components/DataUpload';
 import Dashboard from '@/components/Dashboard';
 import { DataRow } from '@/types/data';
+import Footer from '@/components/Footer';
 
 // 🔧 WEEK 2: Import your UploadProgressSimulator component here
 // 🔧 WEEK 3+: Additional imports will be added as you progress
@@ -36,9 +37,9 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* 🎨 Hero Section - The top part of your homepage */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 flex-1">
         <div className="text-center mb-12">
           {/* 🎯 Logo and Title */}
           <div className="flex items-center justify-center mb-6">
@@ -133,6 +134,9 @@ const Index = () => {
           </>
         )}
       </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };
