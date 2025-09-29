@@ -12,6 +12,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";  // Fo
 import { BrowserRouter, Routes, Route } from "react-router-dom";  // For navigation between pages
 import Index from "./pages/Index";      // 🏠 Homepage component
 import NotFound from "./pages/NotFound"; // 🚫 404 error page
+import DemoCounter from "./pages/DemoCounter"; // 🎓 Instructor demo page
+import LiveSession from "./pages/LiveSession"; // 🎮 Live session playground
 
 // Create a client for managing data queries (don't worry about this yet!)
 const queryClient = new QueryClient();
@@ -29,6 +31,12 @@ const App = () => (
         <Routes>
           {/* 🏠 Main route - shows your homepage */}
           <Route path="/" element={<Index />} />
+          
+          {/* 🎓 Instructor demo route - for live useState demonstrations */}
+          <Route path="/demo-counter" element={<DemoCounter />} />
+          
+          {/* 🎮 Live session playground - interactive React examples */}
+          <Route path="/live-session" element={<LiveSession />} />
           
           {/* 🔧 WEEK 2+: Add new routes here as you build more pages */}
           {/* Example: <Route path="/dashboard" element={<Dashboard />} /> */}
