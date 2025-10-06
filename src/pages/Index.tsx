@@ -19,6 +19,7 @@ import DataUpload from '@/components/DataUpload';
 import Dashboard from '@/components/Dashboard';
 import { DataRow } from '@/types/data';
 import Footer from '@/components/Footer';
+import UploadProgressSim from '@/components/UploadProgressSim';
 // 🆕 WEEK 3: Import NameInput demo
 // import NameInput from '@/components/NameInput';
 
@@ -65,6 +66,10 @@ const Index = () => {
           {/* <div className="mt-8 mb-8 flex justify-center">
             <NameInput />
           </div> */}
+        </div>
+
+        <div className="mb-8">
+          <UploadProgressSim/>
         </div>
 
         {/* 🔧 WEEK 2: ADD YOUR PROGRESS COMPONENT HERE! */}
