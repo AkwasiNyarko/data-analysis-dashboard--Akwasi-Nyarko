@@ -20,6 +20,7 @@ import Dashboard from '@/components/Dashboard';
 import { DataRow } from '@/types/data';
 import Footer from '@/components/Footer';
 import UploadProgressSim from '@/components/UploadProgressSim';
+import InteractivePractice from "../components/homework/InteractivePractice";
 // 🆕 WEEK 3: Import NameInput demo
 // import NameInput from '@/components/NameInput';
 
@@ -146,6 +147,8 @@ const Index = () => {
         )}
       </div>
 
+      
+      <InteractivePractice />
       {/* Footer */}
       <Footer />
     </div>
