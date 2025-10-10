@@ -1,23 +1,19 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+// import { Input } from "./ui/input";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 const COLORS = ["#f87171", "#60a5fa", "#34d399", "#fbbf24", "#a78bfa"];
 
 const Week3LiveDemo = () => {
-  // Counter state
   const [count, setCount] = useState(0);
-  // Name input state
   const [name, setName] = useState("");
   const [greeting, setGreeting] = useState("");
   const [nameError, setNameError] = useState("");
-  // Color picker state
   const [bgColor, setBgColor] = useState("#fff");
-  // Toggle state
   const [showMsg, setShowMsg] = useState(true);
 
-  // Reset all
   const handleReset = () => {
     setCount(0);
     setName("");
@@ -27,7 +23,6 @@ const Week3LiveDemo = () => {
     setShowMsg(true);
   };
 
-  // Name input submit
   const handleNameSubmit = () => {
     setNameError("");
     if (!name.trim()) {

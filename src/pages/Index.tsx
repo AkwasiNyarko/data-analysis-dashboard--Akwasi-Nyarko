@@ -22,7 +22,7 @@ import Footer from '@/components/Footer';
 import UploadProgressSim from '@/components/UploadProgressSim';
 import InteractivePractice from "../components/homework/InteractivePractice";
 // 🆕 WEEK 3: Import NameInput demo
-// import NameInput from '@/components/NameInput';
+import NameInput from '@/components/NameInput';
 
 // 🔧 WEEK 2: Import your UploadProgressSimulator component here
 // 🔧 WEEK 3+: Additional imports will be added as you progress
@@ -63,10 +63,10 @@ const Index = () => {
           <p className="text-lg text-slate-500 max-w-2xl mx-auto">
             Built by Akwasi Nyarko - Future AI Engineer
           </p>
-          {/* 🆕 WEEK 3: Live Event Handling Demo (removed NameInput from homepage) */}
-          {/* <div className="mt-8 mb-8 flex justify-center">
+          {/* 🆕 WEEK 3: Live Event Handling Demo (NameInput displayed on homepage) */}
+          <div className="mt-8 mb-8 flex justify-center">
             <NameInput />
-          </div> */}
+          </div>
         </div>
 
         <div className="mb-8">
