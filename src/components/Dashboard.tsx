@@ -241,7 +241,7 @@ ${Object.entries(summary.columnTypes)
               <ChartSection data={data} />
             </div>
             <div className="xl:col-span-1">
-              <InsightsPanel insights={insights.slice(0, 6)} />
+              <InsightsPanel data={data} insights={insights.slice(0, 6)} />
             </div>
           </div>
         </TabsContent>
@@ -251,7 +251,7 @@ ${Object.entries(summary.columnTypes)
         </TabsContent>
 
         <TabsContent value="insights">
-          <InsightsPanel insights={insights} showAll />
+          <InsightsPanel data={data} insights={insights} showAll />
         </TabsContent>
 
         <TabsContent value="chat">
