@@ -39,14 +39,15 @@ By the end of this session, you will be able to:
 ### 0:00-0:10: Quality Detective Challenge 🔍
 
 **What You'll Do:**
-Work in teams to find 4 intentionally planted bugs in the `/broken-demo` component.
+
+Work in teams to find 5 intentionally planted bugs in the `/broken-demo` component—including a UI/UX bug where the button to redisplay the chart is missing.
 
 **How It Works:**
-1. Form teams of 3-4 students
+1. You will be put into a breakout room with a group of students
 2. Navigate to `/broken-demo` in the application
 3. Open and follow the `broken-demo-challenge/WORKSHEET.md`
-4. Use systematic debugging to find all 4 bugs
-5. Document each bug with evidence
+4. Use systematic debugging to find all 5 bugs (Visual, Runtime, Logic, Edge Case, and UI/UX)
+5. Document each bug with evidence, including UI/UX issues (e.g., missing or hidden buttons)
 
 **Why It Matters:**
 This warm-up exercise teaches you systematic debugging before the main workshop. You'll practice:
@@ -55,6 +56,7 @@ This warm-up exercise teaches you systematic debugging before the main workshop.
 - Console investigation
 - Code analysis
 - Professional bug documentation
+- Identifying UI/UX bugs and edge cases (such as missing or inaccessible UI elements)
 
 **The Systematic Debugging Process:**
 
@@ -80,7 +82,8 @@ This warm-up exercise teaches you systematic debugging before the main workshop.
 - Look for suspicious code at the line numbers mentioned in errors
 - Check for undefined variables, incorrect data structures, or logic errors
 
-**Reference:** See `broken-demo-challenge/WORKSHEET.md` for the complete guided worksheet.
+
+**Reference:** See `broken-demo-challenge/WORKSHEET.md` for the complete guided worksheet. Remember to look for all 5 bugs, including subtle UI/UX issues (such as when a button is missing or cannot be accessed).
 
 ---
 
