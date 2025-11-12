@@ -94,7 +94,7 @@ const InsightsPanel = ({
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
-				prompt: `Talk like a scottish pirate and be concise and generate insights for the following dataset: ${JSON.stringify(data)}`,
+				prompt: `Be concise and generate insights for the following dataset: ${JSON.stringify(data)}`,
 			}),
 		})
 			.then((res) => res.json())
