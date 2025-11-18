@@ -89,21 +89,26 @@ const InsightsPanel = ({
 	};
 
 	const handleGenerateInsight = () => {
-		fetch('http://localhost:4000/insight', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ prompt: 'Generate AI Insight' })
+		setIsLoading(true);
+		fetch("http://localhost:4000/insight", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				prompt: `Be concise and generate insights for the following dataset: ${JSON.stringify(data)}`,
+			}),
 		})
-		.then(res => res.json())
-		.then(data => {
-			console.log(data);
-		})
-		.catch(err => {
-			console.error(err);
-		});
+			.then((res) => res.json())
+			.then((data) => {
+				console.log(data);
+				setAiInsight(data);
+			})
+			.catch((err) => {
+				console.error(err);
+			})
+			.finally(() => {
+				setIsLoading(false);
+			});
 	};
-
-	
 
 	// 🟢 EASY - Week 3: Empty State Handling
 	// TODO: Students - Always handle empty states gracefully
@@ -127,7 +132,6 @@ const InsightsPanel = ({
 					<CardTitle>Insights</CardTitle>
 				</CardHeader>
 				<CardContent>
-				<Button onClick={handleGenerateInsight}>Generate AI Insight</Button>
 					<p className="text-gray-500 text-center py-8">
 						No insights available. Upload data to see automated analysis.
 					</p>
