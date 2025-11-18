@@ -1,9 +1,7 @@
 # 🔍 Quality Detective Challenge - Instructor Solution Guide
 
 ## Overview
-This guide provides detailed explanations of all 4 bugs in the BrokenDemo component and their fixes for instructors to reference during the live demo and discussion.
-
----
+This guide provides detailed explanations of all 5 bugs in the BrokenDemo component and their fixes for instructors to reference during the live demo and discussion.
 
 ## 🐛 Bug #1: Visual/Logic Error (EASY)
 
@@ -207,213 +205,35 @@ When `useEmptyData` is `true`, `chartData` becomes an **empty array `[]`**. Rech
 )}
 ```
 
+## 🐛 Bug #5: UI/UX Bug - Button Visibility (MEDIUM)
+
+### Location
+**File:** `src/pages/BrokenDemo.tsx`  
+**Line:** ~22-30 (button rendering logic)
+
+### The Bug
+The "Use Sample Data" / "Use Empty Data" button is always visible, even when the chart is hidden. This confuses users, as the button should only appear when the chart is shown.
+
+### The Problem
+Button visibility is not tied to chart visibility. This is a UI/UX bug that can lead to confusion and poor user experience.
+
+### The Fix
+```tsx
+{showChart && (
+  <Button onClick={toggleData}>
+    {useEmptyData ? 'Use Sample Data' : 'Use Empty Data'}
+  </Button>
+)}
+```
+
 ### Teaching Points
-- ✅ Always test **edge cases** and **boundary conditions**
-- ✅ Empty arrays, null values, and undefined are common edge cases
-- ✅ **Defensive programming**: check data before rendering
-- ✅ Provide helpful error messages instead of crashes
-- ✅ This is an **edge case bug** - only appears in specific scenarios
-- ✅ Good QA catches edge cases before users do
+- ✅ UI/UX bugs can be subtle but important
+- ✅ Conditional rendering should match user expectations
+- ✅ Always test visibility of interactive elements in all states
 
 ### Discovery Method
-- Click "Use Empty Data" button
-- Try to show the chart
-- Notice the chart crashes or shows nothing
-- Review code to see how empty data is handled
-- **Severity:** MEDIUM (breaks specific scenario, but not main use case)
+- Visual inspection and interaction testing
+- **Severity:** MEDIUM (confusing but not breaking)
 
 ---
 
-## 📊 Progressive Difficulty Summary
-
-| Bug # | Difficulty | Discovery Time | Discovery Method | Type | Learning Goal |
-|-------|------------|----------------|------------------|------|---------------|
-| 1 | Easy | 30 sec - 1 min | Visual inspection | Visual | UI/UX attention to detail |
-| 2 | Medium | 2-3 minutes | Console errors | Runtime | Reading error messages |
-| 3 | Medium-Hard | 5-7 minutes | Output validation | Logic | Data structure validation |
-| 4 | Hard | 5-10 minutes | Edge case testing | Edge Case | Defensive programming |
-
----
-
-## 🎓 Expected Student Journey
-
-### Minute 0-2: Initial Testing
-- Students load `/broken-demo`
-- Spot Bug #1 immediately (button text)
-- Some might document it, others might ignore thinking it's intentional
-
-### Minute 2-5: First Interaction
-- Click "Show Chart"
-- App crashes with Bug #2
-- Open console, see error message
-- Most students find Bug #2 quickly with console help
-
-### Minute 5-10: Deeper Investigation
-- Some students fix Bug #2 mentally
-- Try to imagine what chart should look like
-- More observant students notice Bug #3 (swapped data)
-- Others might miss it if they don't carefully examine expected output
-
-### Minute 10-15: Edge Case Discovery
-- Curious students click "Use Empty Data"
-- Discover Bug #4 (empty array crash)
-- Realize importance of testing all buttons/options
-
-### Common Student Mistakes
-- ❌ Stopping after finding Bug #2 (thinking that was the only issue)
-- ❌ Not clicking "Use Empty Data" button (missing Bug #4)
-- ❌ Not checking console (makes Bug #2 harder to find)
-- ❌ Fixing bugs one-by-one instead of documenting all first
-- ❌ Assuming "no error = no bug" (missing Bug #3)
-
----
-
-## 🎯 Discussion Questions for Class
-
-### After Bug Discovery Phase:
-1. **"Which bug did your team find first? How?"**
-   - Most will say Bug #1 or #2
-   - Discuss different discovery methods
-
-2. **"Did anyone miss Bug #3? Why was it harder to find?"**
-   - Emphasize that no errors ≠ correct behavior
-   - Talk about data validation importance
-
-3. **"How many teams found Bug #4?"**
-   - Discuss edge case testing
-   - Why testing all UI options matters
-
-4. **"What role did the browser console play?"**
-   - Essential for Bug #2
-   - Not helpful for Bug #1, #3, #4
-
-5. **"How did you prioritize which bugs to fix first?"**
-   - Critical (crashes) vs Low (cosmetic)
-   - User impact assessment
-
----
-
-## 🛠️ Debugging Process to Emphasize
-
-### The Systematic Approach:
-1. **Visual Inspection First**
-   - Look before clicking
-   - Notice UI inconsistencies
-
-2. **Interaction Testing**
-   - Click every button
-   - Try different sequences
-   - Test all options
-
-3. **Console Checking**
-   - Always check console when things break
-   - Read error messages carefully
-   - Note line numbers
-
-4. **Edge Case Testing**
-   - Try empty data
-   - Try extreme values
-   - Test boundary conditions
-
-5. **Output Validation**
-   - Does it look right?
-   - Matches expected behavior?
-   - Data makes sense?
-
----
-
-## 📝 Assessment Rubric
-
-### Excellent (4/4 bugs found)
-- Found all 4 bugs through systematic testing
-- Documented each with clear descriptions
-- Proposed reasonable fixes
-- Prioritized by severity correctly
-
-### Good (3/4 bugs found)
-- Found the obvious bugs (1, 2)
-- Found one of the harder bugs (3 or 4)
-- Reasonable documentation
-- Shows understanding of debugging process
-
-### Satisfactory (2/4 bugs found)
-- Found the two easiest bugs (1, 2)
-- Basic documentation
-- Needs more practice with systematic testing
-
-### Needs Improvement (0-1 bugs found)
-- Minimal testing performed
-- Did not use console effectively
-- Needs guidance on debugging methodology
-
----
-
-## 🎬 Demo Flow Suggestions
-
-### Part 1: Setup (2 minutes)
-- Show `/broken-demo` on screen
-- Explain there are 4 bugs
-- Don't reveal what they are
-- Send students to breakout rooms
-
-### Part 2: Student Work (15 minutes)
-- Students work in groups
-- You circulate and observe (or monitor breakout rooms)
-- Don't give answers, ask guiding questions
-- Note which bugs are found quickly vs slowly
-
-### Part 3: Share-Out (8 minutes)
-- Bring everyone back
-- Have each group share findings (rotate presenters)
-- Build a master list of all bugs found
-- Discuss severity and priority
-
-### Part 4: Solution Reveal (5 minutes)
-- Show `/broken-demo-solution`
-- Walk through each bug
-- Discuss fixes and prevention
-- Connect to broader QA concepts
-
----
-
-## 💡 Teaching Moments
-
-### Bug #1 Teaches:
-- Importance of UI/UX consistency
-- Boolean logic in conditionals
-- Visual testing before code review
-
-### Bug #2 Teaches:
-- Variable initialization
-- How to read console errors
-- Error messages are helpful, not scary
-
-### Bug #3 Teaches:
-- Data structure validation
-- API/library documentation importance
-- No errors doesn't mean correct
-
-### Bug #4 Teaches:
-- Edge case testing methodology
-- Defensive programming techniques
-- User experience with error states
-
----
-
-## 🔄 Connection to Rest of Session
-
-This demo sets up the rest of Week 9:
-- ✅ Introduces systematic debugging
-- ✅ Shows different bug types
-- ✅ Emphasizes testing importance
-- ✅ Leads into test case creation
-- ✅ Demonstrates QA mindset
-
----
-
-**After this demo, students should understand:**
-- Testing is systematic, not random
-- Multiple bug types exist (visual, runtime, logic, edge case)
-- Console is an essential debugging tool
-- Edge cases require deliberate testing
-- Quality assurance is a professional discipline

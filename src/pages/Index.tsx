@@ -18,7 +18,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import DataUpload from '@/components/DataUpload';
 import Dashboard from '@/components/Dashboard';
 import { DataRow } from '@/types/data';
-
+import MockAIChat from '@/components/MockAIChat';
+<MockAIChat />
 import Footer from '@/components/Footer';
 import UploadProgressSim from '@/components/UploadProgressSim';
 import InteractivePractice from "../components/homework/InteractivePractice";

@@ -1,21 +1,24 @@
 # 🔍 Bug Hunting Worksheet - Quality Detective Challenge
 
+
 ## Your Detective Team: _______________
 
 ---
 
 ## 🎯 Mission
-Find and document all 4 bugs in the BrokenDemo component at `/broken-demo`
+Find and document all 5 bugs in the BrokenDemo component at `/broken-demo`—including a UI/UX bug where the button to redisplay the chart is missing.
 
 ---
 
 ## 📋 Systematic Debugging Process
+
 
 ### Step 1: Visual Inspection (2 minutes)
 Look at the UI WITHOUT clicking anything yet.
 - What do you notice about the button text?
 - Does anything look "off" visually?
 - Are there any obvious UI inconsistencies?
+- Is any button missing or inaccessible?
 
 **Your observations:**
 ```
@@ -26,12 +29,14 @@ _____________________
 
 ---
 
+
 ### Step 2: User Interaction Testing (3 minutes)
 Now interact with the component. Test everything!
 - Click "Show Chart" - what happens?
 - Click "Use Empty Data" - what happens?
 - Try different sequences of button clicks
 - Does the button text match what it does?
+- After hiding the chart, can you redisplay it? Is the button visible?
 
 **What broke? Document each issue:**
 
@@ -47,6 +52,7 @@ Now interact with the component. Test everything!
 
 ---
 
+
 ### Step 3: Console Investigation (3 minutes)
 Open Chrome DevTools (F12) and check the Console tab.
 - What error messages do you see?
@@ -54,36 +60,33 @@ Open Chrome DevTools (F12) and check the Console tab.
 - What does the error message tell you?
 
 **Console findings:**
-```
+Find and document all 5 bugs in the BrokenDemo component at `pages/broken-demo` (Visual, Runtime, Logic, Edge Case, and UI/UX)
 _____________________
-_____________________
-_____________________
-```
-
----
-
-### Step 4: Code Investigation (5 minutes)
-Look at `src/pages/BrokenDemo.tsx` in Dev Mode
-- Where do you think the bugs are? (line numbers)
-- What code looks suspicious?
-- What variables might be undefined?
-- Are data structures used correctly?
-
----
-
-## 🐛 Bug Documentation Table
-
 | Bug # | Line # | Type | What's Wrong | Your Proposed Fix |
 |-------|--------|------|--------------|-------------------|
-| 1     |        | Visual / Logic / Runtime / Edge Case |              |                   |
-| 2     |        | Visual / Logic / Runtime / Edge Case |              |                   |
-| 3     |        | Visual / Logic / Runtime / Edge Case |              |                   |
-| 4     |        | Visual / Logic / Runtime / Edge Case |              |                   |
+| 1     |        | Visual / Logic / Runtime / Edge Case / UI/UX |              |                   |
+| 2     |        | Visual / Logic / Runtime / Edge Case / UI/UX |              |                   |
+| 3     |        | Visual / Logic / Runtime / Edge Case / UI/UX |              |                   |
+| 4     |        | Visual / Logic / Runtime / Edge Case / UI/UX |              |                   |
+| 5     |        | Visual / Logic / Runtime / Edge Case / UI/UX |              |                   |
+ Open Chrome DevTools (F12) and check the Console tab.
+ - Are there any error messages or warnings? (Note: The BrokenDemo component does not produce console logs, but always check for errors as part of systematic debugging.)
+ - What line numbers are mentioned, if any?
+ - What does the error message tell you?
 
----
+ **Console findings:**
+ If you do not see any console logs or errors, note that as part of your investigation. Not all bugs will produce console output, but checking is a key QA habit.
+ _____________________
+ | Bug # | Line # | Type | What's Wrong | Your Proposed Fix |
+ |-------|--------|------|--------------|-------------------|
+ | 1     |        | Visual / Logic / Runtime / Edge Case / UI/UX |              |                   |
+ | 2     |        | Visual / Logic / Runtime / Edge Case / UI/UX |              |                   |
+ | 3     |        | Visual / Logic / Runtime / Edge Case / UI/UX |              |                   |
+ | 4     |        | Visual / Logic / Runtime / Edge Case / UI/UX |              |                   |
+ | 5     |        | Visual / Logic / Runtime / Edge Case / UI/UX |              |                   |
 
-### Step 5: Prioritize by Severity
-Rank these bugs from most to least severe:
+ Where do you think the bugs are? (line numbers)
+ Rank these bugs from most to least severe:
 
 1. **Most Critical:** _______________ 
    - **Why?** _______________
@@ -97,16 +100,52 @@ Rank these bugs from most to least severe:
 4. **Low Priority:** _______________ 
    - **Why?** _______________
 
----
-
-### Step 6: Propose Solutions
-For each bug, write the CODE FIX you would implement:
-
+5. **Lowest Priority:** _______________ 
+   - **Why?** _______________
+- Are data structures used correctly?
 **Bug #1 Fix:**
 ```tsx
 // Your code here
 
 
+```
+
+**Bug #2 Fix:**
+```tsx
+// Your code here
+
+
+```
+
+**Bug #3 Fix:**
+```tsx
+// Your code here
+
+
+```
+
+**Bug #4 Fix:**
+```tsx
+// Your code here
+
+
+```
+
+**Bug #5 Fix:**
+```tsx
+// Your code here
+
+
+```
+---
+- [ ] Found all 5 bugs (including UI/UX)
+- [ ] Documented each bug with clear description
+- [ ] Identified line numbers in code
+- [ ] Proposed fixes for each bug
+- [ ] Prioritized bugs by severity
+- [ ] Tested your understanding with the solution page
+- [ ] Reflected on what you learned
+**Bugs Found:** _____ out of 5
 
 
 ```

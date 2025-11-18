@@ -7,19 +7,29 @@ export default function BrokenDemo() {
   const [showChart, setShowChart] = useState(false);
   const [useEmptyData, setUseEmptyData] = useState(false);
   
-  let chartData;
+  let chartData = [];
   
   const handleShowChart = () => {
     if (useEmptyData) {
       chartData = [];
+      console.log('Chart data set to empty array:', chartData);
+      if (chartData.length === 0) {
+        console.error('Error: Chart data is empty. Chart will not display any bars.');
+      }
     } else {
       chartData = [
         { name: 400, value: 'Jan' },
         { name: 300, value: 'Feb' },
         { name: 600, value: 'Mar' }
       ];
+      console.log('Chart data set to sample data:', chartData);
+      // Example error: wrong data format (intentional bug)
+      if (typeof chartData[0].value === 'string') {
+        console.error('Error: Chart data values should be numbers, not strings.');
+      }
     }
     setShowChart(true);
+    console.log('Show chart button clicked. showChart state:', true);
   };
 
   return (
@@ -40,7 +50,13 @@ export default function BrokenDemo() {
             
             <Button 
               variant="outline" 
-              onClick={() => setUseEmptyData(!useEmptyData)}
+              onClick={() => {
+                setUseEmptyData(!useEmptyData);
+                console.log('Toggled useEmptyData. New value:', !useEmptyData);
+                if (!useEmptyData) {
+                  console.error('Error: Switched to empty data with no chart data. Chart will be blank.');
+                }
+              }}
             >
               {useEmptyData ? 'Use Sample Data' : 'Use Empty Data'}
             </Button>
