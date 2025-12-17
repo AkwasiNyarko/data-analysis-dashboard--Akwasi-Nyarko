@@ -23,6 +23,8 @@ import MockAIChat from '@/components/MockAIChat';
 import Footer from '@/components/Footer';
 import UploadProgressSim from '@/components/UploadProgressSim';
 import InteractivePractice from "../components/homework/InteractivePractice";
+import DataAnalyzer from '@/components/DataAnalyzer';
+<DataAnalyzer />
 // 🆕 WEEK 3: Import NameInput demo
 // import NameInput from '@/components/NameInput';
 
