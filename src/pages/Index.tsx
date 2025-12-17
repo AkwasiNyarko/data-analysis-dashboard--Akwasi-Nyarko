@@ -22,7 +22,6 @@ import MockAIChat from '@/components/MockAIChat';
 <MockAIChat />
 import Footer from '@/components/Footer';
 import UploadProgressSim from '@/components/UploadProgressSim';
-import InteractivePractice from "../components/homework/InteractivePractice";
 import DataAnalyzer from '@/components/DataAnalyzer';
 <DataAnalyzer />
 // 🆕 WEEK 3: Import NameInput demo
@@ -151,8 +150,6 @@ const Index = () => {
         )}
       </div>
 
-      
-      <InteractivePractice />
       {/* Footer */}
       <Footer />
     </div>
