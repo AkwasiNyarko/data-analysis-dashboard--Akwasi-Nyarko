@@ -19,11 +19,8 @@ import DataUpload from '@/components/DataUpload';
 import Dashboard from '@/components/Dashboard';
 import { DataRow } from '@/types/data';
 import MockAIChat from '@/components/MockAIChat';
-<MockAIChat />
 import Footer from '@/components/Footer';
-import UploadProgressSim from '@/components/UploadProgressSim';
 import DataAnalyzer from '@/components/DataAnalyzer';
-<DataAnalyzer />
 // 🆕 WEEK 3: Import NameInput demo
 // import NameInput from '@/components/NameInput';
 
@@ -44,7 +41,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-white via-blue-50 to-indigo-100">
       {/* 🎨 Hero Section - The top part of your homepage */}
       <div className="container mx-auto px-4 py-8 flex-1">
         <div className="text-center mb-12">
@@ -70,10 +67,6 @@ const Index = () => {
           {/* <div className="mt-8 mb-8 flex justify-center">
             <NameInput />
           </div> */}
-        </div>
-
-        <div className="mb-8">
-          <UploadProgressSim/>
         </div>
 
         {/* 🔧 WEEK 2: ADD YOUR PROGRESS COMPONENT HERE! */}
@@ -132,7 +125,7 @@ const Index = () => {
               <CardHeader className="text-center">
                 <CardTitle className="text-2xl">Get Started</CardTitle>
                 <CardDescription>
-                  Upload your CSV file to begin exploring your data
+                  Upload your CSV file to begin exploring your data.
                 </CardDescription>
               </CardHeader>
               <CardContent>

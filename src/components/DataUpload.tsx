@@ -10,10 +10,9 @@
 // 🔧 WEEK 7: Students will integrate with external APIs
 
 import { useState, useCallback } from 'react';
-import { Upload, FileText, AlertCircle, CheckCircle, X, FileSpreadsheet } from 'lucide-react';
+import { Upload, FileText, AlertCircle, CheckCircle, X, FileSpreadsheet, RotateCcw } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataRow } from '@/types/data';
 
@@ -38,6 +37,7 @@ const DataUpload = ({ onDataLoad }: DataUploadProps) => {
   const [error, setError] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [stats, setStats] = useState<UploadStats | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   
   // 🔧 WEEK 3: Add form validation state here
   // Example: const [validationErrors, setValidationErrors] = useState([]);
@@ -169,16 +169,9 @@ const DataUpload = ({ onDataLoad }: DataUploadProps) => {
     return data;
   };
 
-  const handleFile = async (file: File) => {
+  const processFile = async (file: File) => {
     const startTime = Date.now();
     
-    // Validate file
-    const validationError = validateFile(file);
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
-
     setIsLoading(true);
     setError(null);
     setUploadProgress(0);
@@ -210,6 +203,7 @@ const DataUpload = ({ onDataLoad }: DataUploadProps) => {
       setTimeout(() => {
         console.log('Upload successful:', uploadStats);
         onDataLoad(data, file.name);
+        setSelectedFile(null); // Clear selected file after successful upload
       }, 500);
 
     } catch (err) {
@@ -219,6 +213,40 @@ const DataUpload = ({ onDataLoad }: DataUploadProps) => {
       console.error('CSV parsing error:', err);
     } finally {
       setTimeout(() => setIsLoading(false), 500);
+    }
+  };
+
+  const handleFileSelection = (file: File) => {
+    // Validate file
+    const validationError = validateFile(file);
+    if (validationError) {
+      setError(validationError);
+      setSelectedFile(null);
+      return;
+    }
+
+    // Store the file but don't process it yet
+    setSelectedFile(file);
+    setError(null);
+    setStats(null);
+    setUploadProgress(0);
+  };
+
+  const startUpload = () => {
+    if (selectedFile) {
+      processFile(selectedFile);
+    }
+  };
+
+  const resetFile = () => {
+    setSelectedFile(null);
+    setError(null);
+    setStats(null);
+    setUploadProgress(0);
+    // Reset file input
+    const fileInput = document.getElementById('file-input') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
     }
   };
 
@@ -233,17 +261,15 @@ const DataUpload = ({ onDataLoad }: DataUploadProps) => {
     }
     
     if (files.length > 0) {
-      handleFile(files[0]);
+      handleFileSelection(files[0]);
     }
   }, []);
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
-      handleFile(files[0]);
+      handleFileSelection(files[0]);
     }
-    // Reset input to allow same file selection
-    e.target.value = '';
   };
 
   const clearError = () => setError(null);
@@ -296,6 +322,8 @@ const DataUpload = ({ onDataLoad }: DataUploadProps) => {
                 ? 'border-primary bg-primary/5'
                 : isLoading
                 ? 'border-muted bg-muted/20'
+                : selectedFile
+                ? 'border-green-300 bg-green-50/50'
                 : 'border-muted-foreground/25 hover:border-muted-foreground/50'
             }`}
             onDrop={handleDrop}
@@ -317,23 +345,36 @@ const DataUpload = ({ onDataLoad }: DataUploadProps) => {
               <div>
                 <p className="text-lg font-medium">
                   {isLoading ? 'Processing your file...' : 
+                   selectedFile ? `File selected: ${selectedFile.name}` :
                    isDragging ? 'Drop your CSV file here' : 'Drop your CSV file here'}
                 </p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {isLoading ? 'Please wait while we analyze your data' : 'or click to browse your files'}
+                  {isLoading ? 'Please wait while we analyze your data' : 
+                   selectedFile ? `Size: ${formatFileSize(selectedFile.size)}` :
+                   'or click to browse your files'}
                 </p>
               </div>
 
               {isLoading && (
-                <div className="w-full max-w-xs space-y-2">
-                  <Progress value={uploadProgress} className="h-2" />
+                <div className="w-full max-w-xs space-y-3">
+                  <div className="mb-2">
+                    <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-blue-500 to-green-500 transition-all duration-300 ease-out"
+                        style={{ width: `${uploadProgress}%` }}
+                      />
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <span className="text-2xl font-bold text-blue-600">{Math.round(uploadProgress)}%</span>
+                  </div>
                   <p className="text-xs text-muted-foreground">
                     {uploadProgress < 90 ? 'Reading file...' : 'Analyzing data...'}
                   </p>
                 </div>
               )}
 
-              {!isLoading && (
+              {!isLoading && !selectedFile && (
                 <Button
                   type="button"
                   variant="outline"
@@ -343,6 +384,28 @@ const DataUpload = ({ onDataLoad }: DataUploadProps) => {
                   <FileText className="h-4 w-4" />
                   <span>Choose File</span>
                 </Button>
+              )}
+
+              {!isLoading && selectedFile && (
+                <div className="flex items-center gap-3">
+                  <Button
+                    type="button"
+                    onClick={startUpload}
+                    className="flex items-center space-x-2 bg-primary hover:bg-primary/90"
+                  >
+                    <Upload className="h-4 w-4" />
+                    <span>Start Upload</span>
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={resetFile}
+                    className="flex items-center space-x-2"
+                  >
+                    <RotateCcw className="h-4 w-4" />
+                    <span>Reset</span>
+                  </Button>
+                </div>
               )}
 
               <input
