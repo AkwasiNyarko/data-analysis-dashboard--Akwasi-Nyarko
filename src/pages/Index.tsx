@@ -17,6 +17,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 // 📊 Data-related imports - components that handle your data
 import DataUpload from '@/components/DataUpload';
 import Dashboard from '@/components/Dashboard';
+import EnhancedErrorBoundary from '@/components/EnhancedErrorBoundary';
 import { DataRow } from '@/types/data';
 import MockAIChat from '@/components/MockAIChat';
 import Footer from '@/components/Footer';
@@ -134,12 +135,12 @@ const Index = () => {
             </Card>
           </>
         ) : (
-          <>
+          <EnhancedErrorBoundary context="Dashboard">
             <Dashboard data={data} fileName={fileName} onReset={() => {
               setData([]);
               setFileName('');
             }} />
-          </>
+          </EnhancedErrorBoundary>
         )}
       </div>
 

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { DataRow } from '@/types/data';
 import { generateDataInsights, getDataSummary, getNumericColumns } from '@/utils/dataAnalysis';
+import EnhancedErrorBoundary from '@/components/EnhancedErrorBoundary';
 
 interface ChatInterfaceProps {
   data: DataRow[];
@@ -17,7 +18,7 @@ interface ChatMessage {
   timestamp: Date;
 }
 
-const ChatInterface = ({ data }: ChatInterfaceProps) => {
+const ChatInterfaceInner = ({ data }: ChatInterfaceProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -47,10 +48,11 @@ const stripMarkdown = (text: string): string => {
     
       // Smart AI response generation based on data context
       const generateAIResponse = (userMessage: string, dataContext: DataRow[]): string => {
-        const lowerMessage = userMessage.toLowerCase();
-        const summary = getDataSummary(dataContext);
-        const insights = generateDataInsights(dataContext);
-        const numericColumns = getNumericColumns(dataContext);
+        try {
+          const lowerMessage = userMessage.toLowerCase();
+          const summary = getDataSummary(dataContext);
+          const insights = generateDataInsights(dataContext);
+          const numericColumns = getNumericColumns(dataContext);
     
         let response = '';
     
@@ -67,7 +69,7 @@ const stripMarkdown = (text: string): string => {
     ${insights.slice(0, 3).map(insight => `• ${insight.title}: ${insight.description}`).join('\n')}
     
     Would you like me to dive deeper into any specific aspect of your data?`;
-        } else if (lowerMessage.includes('chart') || lowerMessage.includes('visualiz')) {
+        } else if (lowerMessage.includes('chart') || lowerMessage.includes('visualize')) {
           const suggestions = [];
           if (numericColumns.length >= 2) {
             suggestions.push(`Scatter Plot: Compare ${numericColumns[0]} vs ${numericColumns[1]} to find correlations`);
@@ -184,7 +186,11 @@ const stripMarkdown = (text: string): string => {
         }
     
         // Strip markdown formatting for clean output
-        return stripMarkdown(response);
+          return stripMarkdown(response);
+        } catch (err) {
+          console.error('[ChatInterface] AI response generation failed:', err);
+          return `Sorry, I couldn't process that request. There was an error analyzing your data. Please try rephrasing or check that your data is valid. (${err instanceof Error ? err.message : 'Unknown error'})`;
+        }
       };
     
       const handleSendMessage = async (messageText?: string) => {
@@ -204,17 +210,29 @@ const stripMarkdown = (text: string): string => {
     
         // Simulate realistic AI response time
         setTimeout(() => {
-          const aiResponse = generateAIResponse(messageToSend, data);
-          
-          const aiMessage: ChatMessage = {
-            id: (Date.now() + 1).toString(),
-            type: 'ai',
-            content: aiResponse,
-            timestamp: new Date()
-          };
-    
-          setMessages(prev => [...prev, aiMessage]);
-          setIsLoading(false);
+          try {
+            const aiResponse = generateAIResponse(messageToSend, data);
+
+            const aiMessage: ChatMessage = {
+              id: (Date.now() + 1).toString(),
+              type: 'ai',
+              content: aiResponse,
+              timestamp: new Date()
+            };
+
+            setMessages(prev => [...prev, aiMessage]);
+          } catch (err) {
+            console.error('[ChatInterface] Failed to add AI message:', err);
+            const errorMessage: ChatMessage = {
+              id: (Date.now() + 1).toString(),
+              type: 'ai',
+              content: 'Sorry, something went wrong while processing your message. Please try again.',
+              timestamp: new Date()
+            };
+            setMessages(prev => [...prev, errorMessage]);
+          } finally {
+            setIsLoading(false);
+          }
         }, 1000 + Math.random() * 1000); // 1-2 second delay for realism
       };
     
@@ -338,5 +356,11 @@ const stripMarkdown = (text: string): string => {
         </Card>
       );
     };
-    
-    export default ChatInterface;
+
+const ChatInterface = (props: ChatInterfaceProps) => (
+  <EnhancedErrorBoundary context="Chat">
+    <ChatInterfaceInner {...props} />
+  </EnhancedErrorBoundary>
+);
+
+export default ChatInterface;

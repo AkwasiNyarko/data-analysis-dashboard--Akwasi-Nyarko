@@ -10,6 +10,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";  // Alternative noti
 import { TooltipProvider } from "@/components/ui/tooltip";   // For helpful hover tips
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";  // For data management
 import { BrowserRouter, Routes, Route } from "react-router-dom";  // For navigation between pages
+import EnhancedErrorBoundary from "@/components/EnhancedErrorBoundary";
 import Index from "./pages/Index";      // 🏠 Homepage component
 import NotFound from "./pages/NotFound"; // 🚫 404 error page
 import DemoCounter from "./pages/DemoCounter"; // 🎓 Instructor demo page
@@ -29,15 +30,16 @@ const queryClient = new QueryClient();
 // 🚀 Main App Component - This wraps your entire application
 function App() {
   return (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      {/* These Toaster components handle popup notifications */}
-      <Toaster />
-      <Sonner />
-      
-      {/* 🧭 Router setup - manages which page to show */}
-      <BrowserRouter>
-        <Routes>
+  <EnhancedErrorBoundary context="Application">
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        {/* These Toaster components handle popup notifications */}
+        <Toaster />
+        <Sonner />
+        
+        {/* 🧭 Router setup - manages which page to show */}
+        <BrowserRouter>
+          <Routes>
           {/* 🏠 Main route - shows your homepage */}
           <Route path="/" element={<Index />} />
           
@@ -68,10 +70,11 @@ function App() {
           <Route path="*" element={<NotFound />} />
 
           <Route path="/week8-live" element={<Week8Live />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </EnhancedErrorBoundary>
   );
 }
 

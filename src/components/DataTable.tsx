@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DataRow } from '@/types/data';
 import { getDataSummary } from '@/utils/dataAnalysis';
+import EnhancedErrorBoundary from '@/components/EnhancedErrorBoundary';
 
 interface DataTableProps {
   data: DataRow[];
@@ -15,7 +16,7 @@ interface DataTableProps {
 
 type SortDirection = 'asc' | 'desc' | null;
 
-const DataTable = ({ data }: DataTableProps) => {
+const DataTableInner = ({ data }: DataTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortColumn, setSortColumn] = useState<string | null>(null);
@@ -364,5 +365,11 @@ const DataTable = ({ data }: DataTableProps) => {
     </Card>
   );
 };
+
+const DataTable = (props: DataTableProps) => (
+  <EnhancedErrorBoundary context="Data Table">
+    <DataTableInner {...props} />
+  </EnhancedErrorBoundary>
+);
 
 export default DataTable;

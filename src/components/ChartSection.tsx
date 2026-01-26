@@ -1,9 +1,9 @@
-
 import { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import { DataRow } from '@/types/data';
 import { getDataSummary, getColumnValues } from '@/utils/dataAnalysis';
+import EnhancedErrorBoundary from '@/components/EnhancedErrorBoundary';
 
 // 📊 Week 6: Professional Data Visualization - Making Your Data Come Alive
 // Students - Transform raw data into compelling visual stories! This component showcases advanced React patterns.
@@ -24,7 +24,7 @@ interface ChartSectionProps {
 // Color palette for charts - Week 8 enhancement: Make this theme-aware and customizable
 const COLORS = ['#3B82F6', '#EF4444', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899'];
 
-const ChartSection = ({ data, showAll = false }: ChartSectionProps) => {
+const ChartSectionInner = ({ data, showAll = false }: ChartSectionProps) => {
   // 🚀 React Performance Optimization - Critical for Professional Apps
   // Students - Master the useMemo hook for optimal performance
   // Why do we use useMemo here? What happens without it?
@@ -47,17 +47,35 @@ const ChartSection = ({ data, showAll = false }: ChartSectionProps) => {
   // Current: Shows first 20 rows (good for demos)
   // Week 8 enhancement: Add pagination, aggregation, and intelligent sampling
   const chartData = useMemo(() => {
-    if (numericColumns.length === 0) return [];
-    
-    // Week 7 improvement: Use meaningful labels instead of "Row 1, Row 2..."
-    // Try using actual data values for better chart readability
-    return data.slice(0, 20).map((row, index) => {
-      const item: any = { name: `Row ${index + 1}` };
-      numericColumns.forEach(col => {
-        item[col] = typeof row[col] === 'number' ? row[col] : 0;
+    try {
+      if (numericColumns.length === 0) return [];
+
+      // Week 7 improvement: Use meaningful labels instead of "Row 1, Row 2..."
+      // Try using actual data values for better chart readability
+      return data.slice(0, 20).map((row, index) => {
+        const item: Record<string, string | number> = { name: `Row ${index + 1}` };
+        numericColumns.forEach((col) => {
+          const val = row[col];
+          item[col] = typeof val === 'number' && Number.isFinite(val) ? val : 0;
+        });
+        return item;
       });
-      return item;
-    });
+    } catch (err) {
+      console.error('[ChartSection] Chart data preparation failed:', err);
+      return [];
+    }
+  }, [data, numericColumns]);
+
+  // 🍰 Pie chart data with try-catch — getColumnValues can throw on malformed data
+  const pieChartData = useMemo(() => {
+    try {
+      if (numericColumns.length === 0) return [];
+      const values = getColumnValues(data, numericColumns[0]).slice(0, 6);
+      return values.map((value, index) => ({ name: `Item ${index + 1}`, value }));
+    } catch (err) {
+      console.error('[ChartSection] Pie chart data preparation failed:', err);
+      return [];
+    }
   }, [data, numericColumns]);
 
   // 💡 Week 3-4: Professional Error Handling
@@ -141,7 +159,7 @@ const ChartSection = ({ data, showAll = false }: ChartSectionProps) => {
                   // Week 7: Add multi-column support and intelligent data grouping
                   <PieChart>
                     <Pie
-                      data={getColumnValues(data, numericColumns[0]).slice(0, 6).map((value, index) => ({ name: `Item ${index + 1}`, value }))}
+                      data={pieChartData}
                       cx="50%"
                       cy="50%"
                       outerRadius={80}
@@ -149,7 +167,7 @@ const ChartSection = ({ data, showAll = false }: ChartSectionProps) => {
                       dataKey="value"
                       label
                     >
-                      {getColumnValues(data, numericColumns[0]).slice(0, 6).map((entry, index) => (
+                      {pieChartData.map((_, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
@@ -164,6 +182,12 @@ const ChartSection = ({ data, showAll = false }: ChartSectionProps) => {
     </div>
   );
 };
+
+const ChartSection = (props: ChartSectionProps) => (
+  <EnhancedErrorBoundary context="Charts">
+    <ChartSectionInner {...props} />
+  </EnhancedErrorBoundary>
+);
 
 export default ChartSection;
 

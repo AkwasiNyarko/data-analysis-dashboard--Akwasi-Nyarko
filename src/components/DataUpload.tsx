@@ -172,22 +172,45 @@ const DataUpload = ({ onDataLoad }: DataUploadProps) => {
   const processFile = async (file: File) => {
     const startTime = Date.now();
     
+    // 1. SAFETY: Define interval outside try/catch so it can be cleared in both blocks
+    let progressInterval: ReturnType<typeof setInterval> | null = null;
+  
     setIsLoading(true);
     setError(null);
     setUploadProgress(0);
-
+  
     try {
-      // Simulate progressive loading for better UX
-      const progressInterval = setInterval(() => {
+      // 2. OPTIMIZATION: Check size BEFORE reading into memory 
+      if (file.size > 10 * 1024 * 1024) { // 10MB
+        throw new Error('File is too large (max 10MB)');
+      }
+  
+      progressInterval = setInterval(() => {
         setUploadProgress(prev => Math.min(prev + 10, 90));
       }, 100);
-
+  
       const text = await file.text();
+      
+      // 3. VALIDATION: Ensure content exists 
+      if (!text || text.trim().length === 0) {
+        throw new Error('File is empty');
+      }
+  
       const data = parseCSV(text);
       
-      clearInterval(progressInterval);
+      // 4. DATA CHECKS: Ensure CSV isn't just a header 
+      if (data.length === 0) {
+        throw new Error('No valid data rows found');
+      }
+      
+      if (data.length > 100000) {
+        console.warn('Large dataset detected, performance may be affected');
+      }
+  
+      // Success Cleanup
+      if (progressInterval) clearInterval(progressInterval);
       setUploadProgress(100);
-
+  
       const processingTime = Date.now() - startTime;
       const uploadStats: UploadStats = {
         fileName: file.name,
@@ -196,26 +219,43 @@ const DataUpload = ({ onDataLoad }: DataUploadProps) => {
         columnCount: Object.keys(data[0] || {}).length,
         processingTime
       };
-
+  
       setStats(uploadStats);
       
-      // Small delay to show completion
       setTimeout(() => {
         console.log('Upload successful:', uploadStats);
         onDataLoad(data, file.name);
-        setSelectedFile(null); // Clear selected file after successful upload
+        setSelectedFile(null);
       }, 500);
-
+  
     } catch (err) {
+      // Error Cleanup (Crucial!)
+      if (progressInterval) clearInterval(progressInterval);
       setUploadProgress(0);
-      const errorMessage = err instanceof Error ? err.message : 'Failed to parse CSV file';
-      setError(`Processing failed: ${errorMessage}`);
+      
+      // 5. USER FEEDBACK: Detailed error mapping 
+      let errorMessage = 'Failed to process file';
+      
+      if (err instanceof Error) {
+        if (err.message.includes('CSV must have')) {
+          errorMessage = 'Invalid CSV format: File needs headers and at least one data row';
+        } else if (err.message.includes('empty')) {
+          errorMessage = 'File is empty or contains no valid data';
+        } else if (err.message.includes('too large')) {
+          errorMessage = 'File exceeds 10MB limit';
+        } else {
+          errorMessage = `Processing failed: ${err.message}`;
+        }
+      }
+      
+      setError(errorMessage);
       console.error('CSV parsing error:', err);
+  
     } finally {
       setTimeout(() => setIsLoading(false), 500);
     }
   };
-
+  
   const handleFileSelection = (file: File) => {
     // Validate file
     const validationError = validateFile(file);
