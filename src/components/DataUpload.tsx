@@ -14,6 +14,7 @@ import { Upload, FileText, AlertCircle, CheckCircle, X, FileSpreadsheet, RotateC
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { DataRow } from '@/types/data';
 
 // 📋 Props interface - defines what data this component expects
@@ -396,21 +397,27 @@ const DataUpload = ({ onDataLoad }: DataUploadProps) => {
               </div>
 
               {isLoading && (
-                <div className="w-full max-w-xs space-y-3">
-                  <div className="mb-2">
-                    <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-                      <div 
-                        className="h-full bg-gradient-to-r from-blue-500 to-green-500 transition-all duration-300 ease-out"
+                <div className="w-full max-w-md space-y-4">
+                  <div className="space-y-2">
+                    <div className="w-full bg-muted rounded-full h-3 overflow-hidden">
+                      <div
+                        className="h-full bg-primary transition-all duration-300 ease-out"
                         style={{ width: `${uploadProgress}%` }}
                       />
                     </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="font-medium text-primary">{Math.round(uploadProgress)}%</span>
+                      <span className="text-muted-foreground">
+                        {uploadProgress < 90 ? 'Reading file...' : 'Analyzing data...'}
+                      </span>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <span className="text-2xl font-bold text-blue-600">{Math.round(uploadProgress)}%</span>
+                  <div className="grid grid-cols-2 gap-3 text-left">
+                    <Skeleton className="h-16 rounded-lg" />
+                    <Skeleton className="h-16 rounded-lg" />
+                    <Skeleton className="col-span-2 h-10 rounded-lg max-w-[85%]" />
+                    <Skeleton className="col-span-2 h-10 rounded-lg max-w-[70%]" />
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    {uploadProgress < 90 ? 'Reading file...' : 'Analyzing data...'}
-                  </p>
                 </div>
               )}
 

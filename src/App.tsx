@@ -10,7 +10,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";  // Alternative noti
 import { TooltipProvider } from "@/components/ui/tooltip";   // For helpful hover tips
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";  // For data management
 import { BrowserRouter, Routes, Route } from "react-router-dom";  // For navigation between pages
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import EnhancedErrorBoundary from "@/components/EnhancedErrorBoundary";
+import { AppHeader } from "@/components/AppHeader";
 import Index from "./pages/Index";      // 🏠 Homepage component
 import NotFound from "./pages/NotFound"; // 🚫 404 error page
 import DemoCounter from "./pages/DemoCounter"; // 🎓 Instructor demo page
@@ -30,16 +32,17 @@ const queryClient = new QueryClient();
 // 🚀 Main App Component - This wraps your entire application
 function App() {
   return (
-  <EnhancedErrorBoundary context="Application">
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        {/* These Toaster components handle popup notifications */}
-        <Toaster />
-        <Sonner />
-        
-        {/* 🧭 Router setup - manages which page to show */}
-        <BrowserRouter>
-          <Routes>
+    <ThemeProvider>
+      <EnhancedErrorBoundary context="Application" level="app">
+        <QueryClientProvider client={queryClient}>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <div className="min-h-screen flex flex-col">
+                <AppHeader />
+                <main className="flex-1">
+                  <Routes>
           {/* 🏠 Main route - shows your homepage */}
           <Route path="/" element={<Index />} />
           
@@ -70,11 +73,14 @@ function App() {
           <Route path="*" element={<NotFound />} />
 
           <Route path="/week8-live" element={<Week8Live />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </EnhancedErrorBoundary>
+                  </Routes>
+                </main>
+              </div>
+            </BrowserRouter>
+          </TooltipProvider>
+        </QueryClientProvider>
+      </EnhancedErrorBoundary>
+    </ThemeProvider>
   );
 }
 

@@ -5,13 +5,12 @@
 // and add interactive components starting in Week 2.
 
 // 📦 React imports - the core tools for building components
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // 🎨 Icon imports - beautiful icons for your UI
 import { Upload, BarChart3, PieChart, TrendingUp, Database } from 'lucide-react';
 
 // 🧩 UI Component imports - pre-built components for your interface
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 // 📊 Data-related imports - components that handle your data
@@ -19,30 +18,76 @@ import DataUpload from '@/components/DataUpload';
 import Dashboard from '@/components/Dashboard';
 import EnhancedErrorBoundary from '@/components/EnhancedErrorBoundary';
 import { DataRow } from '@/types/data';
-import MockAIChat from '@/components/MockAIChat';
 import Footer from '@/components/Footer';
-import DataAnalyzer from '@/components/DataAnalyzer';
-// 🆕 WEEK 3: Import NameInput demo
-// import NameInput from '@/components/NameInput';
-
-// 🔧 WEEK 2: Import your UploadProgressSimulator component here
-// 🔧 WEEK 3+: Additional imports will be added as you progress
+import { saveDataset, loadDataset, clearDataset } from '@/lib/datasetStorage';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Index = () => {
-  // 🧠 Component State - this is your component's memory!
-  // useState lets your component remember and change data
-  const [data, setData] = useState<DataRow[]>([]);      // Stores uploaded data
-  const [fileName, setFileName] = useState<string>(''); // Remembers file name
+  const [data, setData] = useState<DataRow[]>([]);
+  const [fileName, setFileName] = useState<string>('');
+  const [isRestoring, setIsRestoring] = useState(true);
 
-  // 🔄 Event Handler - function that runs when data is uploaded
+  useEffect(() => {
+    const stored = loadDataset();
+    if (stored) {
+      setData(stored.data);
+      setFileName(stored.fileName);
+    }
+    setIsRestoring(false);
+  }, []);
+
   const handleDataLoad = (loadedData: DataRow[], name: string) => {
     setData(loadedData);
     setFileName(name);
+    saveDataset(loadedData, name);
     console.log('Data loaded:', loadedData.length, 'rows');
   };
 
+  const handleReset = () => {
+    setData([]);
+    setFileName('');
+    clearDataset();
+  };
+
+  if (isRestoring) {
+    return (
+      <div className="min-h-screen flex flex-col bg-gradient-to-b from-background via-muted/20 to-muted/40 dark:from-background dark:via-muted/10 dark:to-muted/20">
+        <div className="container mx-auto px-4 py-8 flex-1">
+          <div className="text-center mb-12">
+            <Skeleton className="h-24 w-24 rounded-full mx-auto mb-6" />
+            <Skeleton className="h-12 w-96 max-w-full mx-auto mb-4" />
+            <Skeleton className="h-6 w-64 mx-auto mb-2" />
+            <Skeleton className="h-5 w-80 max-w-full mx-auto" />
+          </div>
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            {[1, 2, 3].map((i) => (
+              <Card key={i} className="border-0 shadow-lg bg-card/80">
+                <CardHeader className="text-center">
+                  <Skeleton className="h-16 w-16 rounded-full mx-auto mb-4" />
+                  <Skeleton className="h-6 w-32 mx-auto mb-2" />
+                  <Skeleton className="h-4 w-full" />
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+          <Card className="max-w-2xl mx-auto border-0 shadow-xl bg-card/80">
+            <CardHeader className="text-center">
+              <Skeleton className="h-8 w-48 mx-auto mb-2" />
+              <Skeleton className="h-4 w-64 mx-auto" />
+            </CardHeader>
+            <CardContent className="space-y-4 p-8">
+              <Skeleton className="h-32 w-full rounded-lg" />
+              <Skeleton className="h-10 w-40 mx-auto" />
+            </CardContent>
+          </Card>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-white via-blue-50 to-indigo-100">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-background via-muted/20 to-muted/40 dark:from-background dark:via-muted/10 dark:to-muted/20">
       {/* 🎨 Hero Section - The top part of your homepage */}
       <div className="container mx-auto px-4 py-8 flex-1">
         <div className="text-center mb-12">
@@ -57,11 +102,11 @@ const Index = () => {
           <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
             Plug-N-Learn: Akwasi's Data Hub
           </h1>
-          <p className="text-xl text-slate-600 mb-2">Data Insight Engine</p>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground mb-2">Data Insight Engine</p>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Upload your dataset and instantly discover insights, visualize trends, and explore your data with interactive charts and analytics.
           </p>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Built by Akwasi Nyarko - Future AI Engineer
           </p>
           {/* 🆕 WEEK 3: Live Event Handling Demo (removed NameInput from homepage) */}
@@ -82,7 +127,7 @@ const Index = () => {
             {/* 🎨 Features Grid - Shows what your app can do */}
             <div className="grid md:grid-cols-3 gap-6 mb-12">
               {/* 📤 Upload Feature Card */}
-              <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/70 backdrop-blur-sm">
+              <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-card/80 backdrop-blur-sm">
                 <CardHeader className="text-center">
                   <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Upload className="h-8 w-8 text-blue-600" />
@@ -95,7 +140,7 @@ const Index = () => {
               </Card>
 
               {/* 📊 Charts Feature Card */}
-              <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/70 backdrop-blur-sm">
+              <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-card/80 backdrop-blur-sm">
                 <CardHeader className="text-center">
                   <div className="bg-indigo-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <BarChart3 className="h-8 w-8 text-indigo-600" />
@@ -108,7 +153,7 @@ const Index = () => {
               </Card>
 
               {/* 🧠 Insights Feature Card */}
-              <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/70 backdrop-blur-sm">
+              <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-card/80 backdrop-blur-sm">
                 <CardHeader className="text-center">
                   <div className="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <TrendingUp className="h-8 w-8 text-teal-600" />
@@ -122,7 +167,7 @@ const Index = () => {
             </div>
 
             {/* 📤 Upload Section - Where users upload their data */}
-            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm max-w-2xl mx-auto">
+            <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm max-w-2xl mx-auto">
               <CardHeader className="text-center">
                 <CardTitle className="text-2xl">Get Started</CardTitle>
                 <CardDescription>
@@ -135,11 +180,8 @@ const Index = () => {
             </Card>
           </>
         ) : (
-          <EnhancedErrorBoundary context="Dashboard">
-            <Dashboard data={data} fileName={fileName} onReset={() => {
-              setData([]);
-              setFileName('');
-            }} />
+          <EnhancedErrorBoundary context="Dashboard" level="page">
+            <Dashboard data={data} fileName={fileName} onReset={handleReset} />
           </EnhancedErrorBoundary>
         )}
       </div>
